@@ -22,6 +22,7 @@ class PollOption {
 
     @Version
     Long version
+
     @NotBlank
     String name
 

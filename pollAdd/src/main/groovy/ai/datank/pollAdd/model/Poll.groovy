@@ -23,6 +23,9 @@ class Poll {
 
     String name
 
+    @OneToMany(mappedBy = 'poll')
+    List<PollOption> pollOptions
+
     Map toMap() {
         [
                 id: id,
