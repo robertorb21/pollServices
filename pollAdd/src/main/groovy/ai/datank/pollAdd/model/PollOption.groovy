@@ -20,9 +20,6 @@ class PollOption {
     @Column(updatable = false)
     String id
 
-    @Version
-    Long version
-
     @NotBlank
     String name
 
@@ -31,8 +28,10 @@ class PollOption {
     @JoinColumn(name = 'poll_id', nullable = false)
     Poll poll
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = 'user_id', nullable = false)
-    User user
+    Map toMap() {
+        [
+                pollId: id,
+                name  : name,
+        ]
+    }
 }

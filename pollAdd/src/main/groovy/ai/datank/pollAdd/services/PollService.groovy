@@ -30,23 +30,24 @@ class PollService {
 
     Poll savePoll(PollCommand pollCommand) {
 
-        Poll poll = new Poll(name: pollCommand.pollName)
-        pollRepository.save(poll)
-
         User user = new User(name: pollCommand.user)
         userRepository.save(user)
 
+        Poll poll = new Poll(name: pollCommand.pollName, owner: user)
+        pollRepository.save(poll)
+
+        List<PollOption> pollOptions = []
         pollCommand.pollOptions.each {
-            log.info('-->-->' + it)
             PollOption pollOption = new PollOption(
                     name: it,
                     poll: poll,
-                    user: user
-
             )
             pollOptionRepository.save(pollOption)
+            pollOptions.add(pollOption)
         }
+        poll.pollOptions = pollOptions
 
+        log.info('-->-->' + poll.pollOptions*.toMap())
         poll
     }
 

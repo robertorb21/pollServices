@@ -5,6 +5,7 @@ import groovy.transform.TypeChecked
 import org.hibernate.annotations.GenericGenerator
 
 import javax.persistence.*
+import javax.validation.constraints.NotNull
 
 @Entity
 @TypeChecked
@@ -18,18 +19,21 @@ class Poll {
     @Column(updatable = false)
     String id
 
-    @Version
-    Long version
-
     String name
 
     @OneToMany(mappedBy = 'poll')
-    List<PollOption> pollOptions
+    List<PollOption> pollOptions = []
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = 'user_id', nullable = false)
+    User owner
 
     Map toMap() {
         [
                 id: id,
                 name: name,
+                pollOptions: pollOptions*.toMap(),
         ]
     }
 }

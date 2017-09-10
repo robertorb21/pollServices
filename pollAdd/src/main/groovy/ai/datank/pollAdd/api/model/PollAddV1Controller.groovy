@@ -8,7 +8,8 @@ import groovy.transform.TypeChecked
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
-import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
@@ -23,11 +24,17 @@ class PollAddV1Controller {
     @Autowired
     PollService pollService
 
-    @PostMapping(value = '/v1/poll')
+    @PutMapping(value = '/v1/poll')
     HttpEntity addPoll(@RequestBody PollCommand pollCommand) {
         Poll poll = pollService.savePoll(pollCommand)
 
         URI uri = fromUriString("/v1/poll/${poll.id}").build().toUri()
         created(uri).body(poll.toMap())
     }
+
+    //@PutMapping(value ='/vi/poll/{voteId}/vote')
+    //HttpEntity<Map> addVote(@PathVariable('voteId') Long voteId) {
+
+        //pollService.addVote(voteId)
+    //}
 }

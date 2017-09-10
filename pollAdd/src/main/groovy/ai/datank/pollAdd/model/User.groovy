@@ -19,9 +19,6 @@ class User {
     @Column(updatable = false)
     String id
 
-    @Version
-    Long version
-
     @NotBlank
     String name
 }
