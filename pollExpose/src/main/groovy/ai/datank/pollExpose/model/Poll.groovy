@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 
 import javax.persistence.*
+import javax.validation.constraints.NotNull
 import java.time.ZonedDateTime
 
 @Entity
@@ -21,18 +22,21 @@ class Poll {
     @Column(updatable = false)
     String id
 
-    @Version
-    Long version
-
-    @Column(name = 'created_at', nullable = true)
-    @CreatedDate
-    @Type(type = 'org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime')
-    ZonedDateTime createdAt
-
-    @Column(name = 'last_modified_at', nullable = true)
-    @LastModifiedDate
-    @Type(type = 'org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime')
-    ZonedDateTime lastModifiedAt
-
     String name
+
+    @OneToMany(mappedBy = 'poll')
+    List<PollOption> pollOptions = []
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = 'user_id', nullable = false)
+    User owner
+
+    Map toMap() {
+        [
+                id: id,
+                name: name,
+                pollOptions: pollOptions*.toMap(),
+        ]
+    }
 }
