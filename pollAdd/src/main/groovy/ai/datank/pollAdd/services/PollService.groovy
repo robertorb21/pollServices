@@ -26,6 +26,8 @@ class PollService {
     @Autowired
     PollRepository pollRepository
     @Autowired
+    PollOptionService pollOptionService
+    @Autowired
     PollOptionRepository pollOptionRepository
 
     Poll savePoll(PollCommand pollCommand) {
@@ -47,8 +49,15 @@ class PollService {
         }
         poll.pollOptions = pollOptions
 
-        log.info('-->-->' + poll.pollOptions*.toMap())
         poll
+    }
+
+    PollOption addVote(String pollOptionId) {
+
+        PollOption pollOption = pollOptionService.getPollOption(pollOptionId)
+        pollOption.votes = pollOption.votes+1
+        pollOptionRepository.save(pollOption)
+
     }
 
 }

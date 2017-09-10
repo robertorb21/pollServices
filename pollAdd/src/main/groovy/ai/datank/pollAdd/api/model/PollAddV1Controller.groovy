@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 import static org.springframework.http.ResponseEntity.created
+import static org.springframework.http.ResponseEntity.ok
 import static org.springframework.web.util.UriComponentsBuilder.fromUriString
 
 @Slf4j
@@ -32,9 +33,9 @@ class PollAddV1Controller {
         created(uri).body(poll.toMap())
     }
 
-    //@PutMapping(value ='/vi/poll/{voteId}/vote')
-    //HttpEntity<Map> addVote(@PathVariable('voteId') Long voteId) {
-
-        //pollService.addVote(voteId)
-    //}
+    @PutMapping(value = '/v1/poll/{pollOptionId}/vote')
+    HttpEntity<Map> addVote(@PathVariable('pollOptionId') String pollOptionId) {
+        pollService.addVote(pollOptionId)
+        ok([ok: true])
+    }
 }
