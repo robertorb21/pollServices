@@ -14,6 +14,7 @@ import java.time.ZonedDateTime
 @Entity
 @TypeChecked
 @CompileStatic
+@Table(name = 'polls')
 class Poll {
 
     @Id

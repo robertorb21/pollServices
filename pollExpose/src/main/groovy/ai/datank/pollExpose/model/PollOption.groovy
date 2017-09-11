@@ -23,6 +23,8 @@ class PollOption {
     @NotBlank
     String name
 
+    BigInteger votes = 0
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = 'poll_id', nullable = false)
@@ -32,6 +34,7 @@ class PollOption {
         [
                 pollId: id,
                 name  : name,
+                votes : votes,
         ]
     }
 }
