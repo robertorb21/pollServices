@@ -38,4 +38,5 @@ class PollAddV1Controller {
         pollService.addVote(pollOptionId)
         ok([ok: true])
     }
+
 }
