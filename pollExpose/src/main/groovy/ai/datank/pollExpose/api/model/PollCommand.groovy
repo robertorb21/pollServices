@@ -6,6 +6,9 @@ import org.hibernate.validator.constraints.NotEmpty
 class PollCommand {
 
     @NotBlank
+    String id
+
+    @NotBlank
     String user
 
     @NotBlank

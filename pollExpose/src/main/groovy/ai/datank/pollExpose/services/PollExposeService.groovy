@@ -43,8 +43,10 @@ class PollExposeService {
         User user = new User(name: pollCommand.user)
         userRepository.save(user)
 
-        Poll poll = new Poll(name: pollCommand.pollName, owner: user)
+        log.info('-->-->' + pollCommand.id)
+        Poll poll = new Poll(id: pollCommand.id, name: pollCommand.pollName, owner: user)
         pollRepository.save(poll)
+        pollRepository.flush()
 
         List<PollOption> pollOptions = []
         pollCommand.pollOptions.each {

@@ -18,8 +18,6 @@ import java.time.ZonedDateTime
 class Poll {
 
     @Id
-    @GeneratedValue(generator = 'uuid2')
-    @GenericGenerator(name = 'uuid2', strategy = 'uuid2')
     @Column(updatable = false)
     String id
 
