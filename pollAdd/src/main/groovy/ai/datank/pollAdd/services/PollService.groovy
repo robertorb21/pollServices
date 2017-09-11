@@ -7,13 +7,16 @@ import ai.datank.pollAdd.model.User
 import ai.datank.pollAdd.repository.PollOptionRepository
 import ai.datank.pollAdd.repository.PollRepository
 import ai.datank.pollAdd.repository.UserRepository
+import com.google.gson.Gson
 import groovy.transform.CompileStatic
 import groovy.transform.TypeChecked
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
 
 import javax.transaction.Transactional
+import org.springframework.data.redis.core.StringRedisTemplate
 
 @Slf4j
 @Service
@@ -29,8 +32,13 @@ class PollService {
     PollOptionService pollOptionService
     @Autowired
     PollOptionRepository pollOptionRepository
+    @Autowired
+    Gson gson
+    @Autowired
+    ApplicationContext ctx
 
     Poll savePoll(PollCommand pollCommand) {
+        sendMessage(pollCommand)
 
         User user = new User(name: pollCommand.user)
         userRepository.save(user)
@@ -54,12 +62,17 @@ class PollService {
 
     PollOption addVote(String pollOptionId) {
 
+
         PollOption pollOption = pollOptionService.getPollOption(pollOptionId)
         pollOption.votes = pollOption.votes+1
         pollOptionRepository.save(pollOption)
 
     }
 
+    void sendMessage(PollCommand pollCommand) {
+        StringRedisTemplate template = ctx.getBean(StringRedisTemplate)
+        template.convertAndSend("chat", gson.toJson(pollCommand))
+    }
 
 
 }
