@@ -33,3 +33,5 @@ CREATE TABLE poll_options (
   created_at              TIMESTAMP WITH TIME ZONE    NULL     DEFAULT now()
 );
 ```
+
+Redis added and services too for comunicate both servers
