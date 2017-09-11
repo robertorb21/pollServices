@@ -1,6 +1,7 @@
 package ai.datank.pollAdd.services
 
 import ai.datank.pollAdd.api.model.PollCommand
+import ai.datank.pollAdd.api.model.PollRedisCommand
 import ai.datank.pollAdd.model.Poll
 import ai.datank.pollAdd.model.PollOption
 import ai.datank.pollAdd.model.User
@@ -38,7 +39,6 @@ class PollService {
     ApplicationContext ctx
 
     Poll savePoll(PollCommand pollCommand) {
-        sendMessage(pollCommand)
 
         User user = new User(name: pollCommand.user)
         userRepository.save(user)
@@ -57,6 +57,8 @@ class PollService {
         }
         poll.pollOptions = pollOptions
 
+        sendMessage(pollCommand, poll.id)
+
         poll
     }
 
@@ -69,9 +71,15 @@ class PollService {
 
     }
 
-    void sendMessage(PollCommand pollCommand) {
+    void sendMessage(PollCommand pollCommand, String pollId) {
+        PollRedisCommand pollRedisCommand = new PollRedisCommand(
+                id: pollId,
+                user: pollCommand.user,
+                pollName: pollCommand.pollName,
+                pollOptions: pollCommand.pollOptions
+        )
         StringRedisTemplate template = ctx.getBean(StringRedisTemplate)
-        template.convertAndSend("chat", gson.toJson(pollCommand))
+        template.convertAndSend("chat", gson.toJson(pollRedisCommand))
     }
 
 
