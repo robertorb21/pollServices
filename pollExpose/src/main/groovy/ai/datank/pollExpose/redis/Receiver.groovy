@@ -1,22 +1,27 @@
 package ai.datank.pollExpose.redis
 
+import ai.datank.pollExpose.api.model.PollCommand
+import ai.datank.pollExpose.services.PollExposeService
+import com.google.gson.Gson
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 
-import java.util.concurrent.CountDownLatch
-
 @Slf4j
 class Receiver {
+    @Autowired
+    PollExposeService pollExposeService
+    @Autowired
+    Gson gson
 
-    CountDownLatch latch
+    PollCommand pollCommand
 
     @Autowired
-    Receiver(CountDownLatch latch) {
-        this.latch = latch
+    Receiver(PollCommand pollCommand) {
+        this.pollCommand = pollCommand
     }
 
     void receiveMessage(String message) {
         log.info("Received ${message}")
-        latch.countDown()
+        pollExposeService.savePoll(gson.fromJson(message, PollCommand))
     }
 }

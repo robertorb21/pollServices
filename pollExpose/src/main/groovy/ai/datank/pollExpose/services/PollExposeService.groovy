@@ -1,6 +1,9 @@
 package ai.datank.pollExpose.services
 
+import ai.datank.pollExpose.api.model.PollCommand
 import ai.datank.pollExpose.model.Poll
+import ai.datank.pollExpose.model.PollOption
+import ai.datank.pollExpose.model.User
 import ai.datank.pollExpose.respository.PollOptionRepository
 import ai.datank.pollExpose.respository.PollRepository
 import ai.datank.pollExpose.respository.UserRepository
@@ -33,5 +36,27 @@ class PollExposeService {
 
     Optional<Poll> findPoll(String pollId) {
         pollRepository.findById(pollId)
+    }
+
+    Poll savePoll(PollCommand pollCommand) {
+
+        User user = new User(name: pollCommand.user)
+        userRepository.save(user)
+
+        Poll poll = new Poll(name: pollCommand.pollName, owner: user)
+        pollRepository.save(poll)
+
+        List<PollOption> pollOptions = []
+        pollCommand.pollOptions.each {
+            PollOption pollOption = new PollOption(
+                    name: it,
+                    poll: poll,
+            )
+            pollOptionRepository.save(pollOption)
+            pollOptions.add(pollOption)
+        }
+        poll.pollOptions = pollOptions
+
+        poll
     }
 }

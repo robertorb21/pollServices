@@ -29,6 +29,7 @@ dependencies {
 	compile('org.codehaus.groovy:groovy')
 	runtime('org.postgresql:postgresql')
 	compileOnly('org.projectlombok:lombok')
+	compile 'com.google.code.gson:gson:2.8.1'
 	compile("org.springframework.boot:spring-boot-starter-data-redis")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
